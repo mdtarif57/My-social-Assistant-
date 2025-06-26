@@ -1,0 +1,27 @@
+// === [1_ai_video_from_image.js] === // 🧠 ULCS AI Video Generator from Image // 🎥 Create dynamic, cinematic videos from a single image using AI animation, audio sync, and visual storytelling // 💰 Enterprise-grade, futuristic quality | Author: AI Creative Architect
+
+const fs = require("fs"); const path = require("path"); const { analyzeImageScene, extractEmotions } = require("./ai_extensions/image_scene_emotion_analyzer"); const { generateNarrationScript } = require("./ai_extensions/script_narrator"); const { createMotionFrames } = require("./engines/image_to_video_animator"); const { synthesizeVoice } = require("./engines/voice_synthesizer"); const { mergeVideoAndAudio } = require("./engines/video_audio_merger"); const { notifyUser } = require("./utils/notification");
+
+/**
+
+Main Function: Generate AI Cinematic Video from a Single Image
+
+@param {string} imagePath - Path to the input image
+
+@param {string} userId - User identifier
+
+@param {string} voiceStyle - Voice style (e.g., "warm", "dramatic", "cinematic") */ async function generateVideoFromImage(imagePath, userId, voiceStyle = "cinematic") { try { console.log("🧠 [VideoGen] Analyzing image..."); const sceneInfo = await analyzeImageScene(imagePath); const emotions = await extractEmotions(imagePath);
+
+console.log("📜 [VideoGen] Generating narrative script..."); const script = await generateNarrationScript(sceneInfo, emotions);
+
+console.log("🎙️ [VideoGen] Synthesizing voice..."); const voicePath = await synthesizeVoice(script, voiceStyle);
+
+console.log("🎞️ [VideoGen] Creating motion frames from image..."); const animatedVideoPath = await createMotionFrames(imagePath, sceneInfo);
+
+console.log("🎬 [VideoGen] Merging video with voiceover..."); const finalVideoPath = await mergeVideoAndAudio(animatedVideoPath, voicePath);
+
+await notifyUser(userId, ✅ Video creation complete! Saved to: ${finalVideoPath}); return finalVideoPath; } catch (error) { console.error("❌ [VideoGen Error]:", error); await notifyUser(userId, ❌ Failed to create video: ${error.message}); return null; } }
+
+
+module.exports = { generateVideoFromImage };
+
