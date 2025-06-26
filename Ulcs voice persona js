@@ -1,0 +1,33 @@
+// === [ulcs_voice_persona_director.js] === // 🎙️ ULCS Voice Persona Director v1.0 // 🧠 AI-Powered Tone, Emotion, and Persona Adjuster for All Speech/Script Modules // 🛠️ Developed with ❤️ for Super Futuristic Voice Automation
+
+const { analyzeEmotion } = require("./utils/emotion_analyzer"); const { detectLanguage } = require("./ai_extensions/multi_lang_parser"); const { generateVoicePrompt } = require("./voice/voice_generator_core"); const { applyPersona } = require("./voice/persona_styler"); const { translateText } = require("./ai_extensions/multi_lang_parser");
+
+/**
+
+Generate enhanced voice content with persona tuning
+
+@param {string} rawScript - User-provided raw text
+
+@param {string} context - Context like "marketing", "narration", "storytelling"
+
+@param {string} userLang - User's preferred language
+
+@param {string} emotionHint - Optional emotion override
+
+@param {string} personaType - Optional persona like "funny", "bold", "empathetic"
+
+@returns {Promise<string>} - Enhanced script with voice tone and persona markup */ async function personalizeVoiceScript(rawScript, context, userLang = "en", emotionHint = null, personaType = "default") { try { const lang = await detectLanguage(rawScript); const baseScript = lang !== "en" ? await translateText(rawScript, "en") : rawScript;
+
+// Step 1: Emotion Analysis (from content or override) const emotion = emotionHint || await analyzeEmotion(baseScript);
+
+// Step 2: Add voice tone, pauses, emphasis with emotion const voicePrompt = await generateVoicePrompt(baseScript, emotion, context);
+
+// Step 3: Style with Persona const styledOutput = await applyPersona(voicePrompt, personaType);
+
+// Step 4: Back-translate to user's language (optional) const finalScript = userLang !== "en" ? await translateText(styledOutput, userLang) : styledOutput;
+
+return finalScript; } catch (err) { console.error("❌ [VoicePersonaDirector Error]:", err.message); return rawScript; // fallback } }
+
+
+module.exports = { personalizeVoiceScript };
+
