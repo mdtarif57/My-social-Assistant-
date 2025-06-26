@@ -1,0 +1,55 @@
+// === [ai_script_video_generator.js] ===
+// 🎬 Ultra Futuristic AI Script-to-Video Generator (V5.0)
+// 🧠 Author: AI Fusion Architect | 🚀 Uses NLP, Emotion Engine, Scene Splitter, AI Animation
+
+const { detectLanguage, translateText } = require("./ai_extensions/multi_lang_parser");
+const { analyzeEmotion } = require("./utils/emotion_engine");
+const { generateVoice } = require("./ai_extensions/voice_generator");
+const { generateSceneFrames } = require("./ai_extensions/scene_imager");
+const { createVideoFromScenes } = require("./utils/video_compiler");
+const { notifyUser } = require("./utils/mobile_comm_api");
+
+// 📌 Main Execution
+async function generateVideoFromScript(scriptText, userId = "default_user", style = "cinematic") {
+  try {
+    console.log("🎬 Starting Script-to-Video Process...");
+
+    // Step 1: Detect language and translate to English
+    const lang = await detectLanguage(scriptText);
+    const scriptEn = await translateText(scriptText, "en");
+
+    // Step 2: Emotion & scene analysis
+    const emotion = await analyzeEmotion(scriptEn);
+    const scenes = splitScriptIntoScenes(scriptEn);
+
+    // Step 3: Generate visuals & voice for each scene
+    const frames = [];
+    for (let scene of scenes) {
+      const image = await generateSceneFrames(scene, style, emotion);
+      frames.push(image);
+    }
+
+    const voiceTrack = await generateVoice(scriptEn, emotion.voiceStyle || "warm");
+
+    // Step 4: Merge scenes + audio into final video
+    const videoPath = await createVideoFromScenes(frames, voiceTrack, userId);
+
+    // Step 5: Notify user
+    await notifyUser(userId, `✅ Your script-based video is ready: ${videoPath}`);
+
+    return `🎞️ Video created successfully! Location: ${videoPath}`;
+  } catch (err) {
+    console.error("❌ Error in Script-to-Video:", err.message);
+    return "❌ Something went wrong while creating the video.";
+  }
+}
+
+// 🔍 Helper: Scene splitter
+function splitScriptIntoScenes(script) {
+  return script
+    .split(/[.!?]/)
+    .map(line => line.trim())
+    .filter(line => line.length > 10);
+}
+
+module.exports = { generateVideoFromScript };
