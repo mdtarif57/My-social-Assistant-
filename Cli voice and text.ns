@@ -1,0 +1,33 @@
+// === [cli_voice_hybrid_interface.js] === // 🚀 CLI + Voice Hybrid Interface with Real-Time Notifyer (Termux & Desktop Compatible) // 🧠 Connected to MainApp.js, Emotion Analyzer, and LocalModel Fallback
+
+const readline = require("readline"); const { handleUserCommand } = require("./main_app"); const { analyzeEmotion } = require("./ai_extensions/emotion_analyzer"); const { detectLanguage } = require("./ai_extensions/multi_lang_parser"); const { speak } = require("./utils/speaker"); // Custom module using 'say' or 'termux-tts-speak' const localModel = require("./localModel");
+
+const rl = readline.createInterface({ input: process.stdin, output: process.stdout, prompt: "🧠 Tarif Hybrid AI > " });
+
+async function handleInput(input, userId = "cli_user") { try { if (!input.trim()) return;
+
+const lang = await detectLanguage(input);
+const emotion = await analyzeEmotion(input);
+
+// Notifier voice tone
+if (emotion === "angry") await speak("Tarif Bhai, kichu boro lagse mone hochhe.");
+else if (emotion === "happy") await speak("Tarif Bhai, sundor kichu bolar moto mone hochhe!");
+else await speak("Tarif Bhai, command receive korlam.");
+
+// Try to execute via main_app.js
+let response = await handleUserCommand(input, userId);
+
+// If failed or GPT down, use localModel
+if (response.includes("error") || response.includes("couldn’t find")) {
+  response = await localModel.handleOffline(input);
+}
+
+console.log("\n✅ Response:\n" + response + "\n");
+await speak("Kaj sesh. Result display kora holo.");
+
+} catch (err) { console.error("❌ CLI Error:", err.message); await speak("Kichu ekta vul holo Tarif Bhai."); } }
+
+function startCLI() { console.log("\n🧠 Tarif Hybrid AI CLI started. Bolo tumi ki korte chao:"); rl.prompt(); rl.on("line", async (line) => { await handleInput(line); rl.prompt(); }); rl.on("close", () => { console.log("👋 Exit kore gecho. Bhalo thako Tarif Bhai."); process.exit(0); }); }
+
+startCLI();
+
