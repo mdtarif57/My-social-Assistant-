@@ -10,7 +10,17 @@
   <link rel="stylesheet" href="style.css" />
   <link rel="icon" href="favicon.ico" />
 </head>
-<body>
+
+  <script>
+  const allowedToken = "Tarif@2025";
+  const userInput = prompt("🔐 Enter access code to continue:");
+  if (userInput !== allowedToken) {
+    alert("❌ Access Denied!");
+    window.location.href = "https://google.com";
+  }
+</script>
+  
+  <body>
   <div class="container">
     <h1>🚀 ULCS AI Assistant</h1>
 
