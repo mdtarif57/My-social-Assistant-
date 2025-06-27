@@ -1,0 +1,37 @@
+<!-- === [index.html] === -->
+<!-- 🚀 ULCS AI Assistant: Ultra Dynamic Web Interface -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ULCS AI Assistant</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="favicon.ico" />
+</head>
+<body>
+  <div class="container">
+    <h1>🚀 ULCS AI Assistant</h1>
+
+    <div class="theme-toggle">
+      <label for="themeSwitch">🌙 Dark Mode</label>
+      <input type="checkbox" id="themeSwitch" onchange="toggleTheme()" />
+    </div>
+
+    <textarea id="userInput" placeholder="🧠 Type or 🎤 Speak your command in any language..."></textarea>
+
+    <div class="controls">
+      <button onclick="sendCommand()">▶ Run</button>
+      <button onclick="startVoice()">🎤 Voice</button>
+      <button onclick="clearOutput()">🧹 Clear</button>
+    </div>
+
+    <div id="typingIndicator" style="display:none;">⏳ AI is thinking...</div>
+
+    <pre id="output"></pre>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
